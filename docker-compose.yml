@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk11
+    container_name: jenkins
+    privileged: true  # Docker 실행을 위해 권한 부여
+    user: root
+    ports:
+      - "9090:8080"
+      - "50000:50000"  # 에이전트 연결용 포트
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker 사용을 위해 바인드
+    environment:
+      - JENKINS_OPTS=--prefix=/jenkins  # Jenkins를 /jenkins 경로에서 실행 가능 (선택)
+    networks:
+      - jenkins_network
+
+volumes:
+  jenkins_home:
+
+networks:
+  jenkins_network:
